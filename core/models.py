@@ -88,7 +88,7 @@ class Answer(models.Model):
 
 # Болезни(диагнозы)
 class Disease(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Название")
+    name = models.CharField(max_length=100, verbose_name="name")
     note = models.TextField() #описание
 
     def __str__(self):
@@ -101,7 +101,7 @@ class Epicriz(models.Model):
     patient = models.ForeignKey(Patient, on_delete = models.CASCADE)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     invalid = models.BooleanField(default = False)
-    lechenie = models.CharField(max_length=500, default="", verbose_name="Лечение", null=True)
+    lechenie = models.CharField(max_length=500, default="", verbose_name="lechenie", null=True)
     date_gospit = models.DateField(default = "1999-01-01" , null=True)
     date_vipisky = models.DateField(default = "1999-01-01", null=True)
 
