@@ -121,3 +121,20 @@ class Diagnos(models.Model):
     def __str__(self):
         return self.note
 
+# правила
+# class Rule(models.Model):
+#     diagnos = models.ForeignKey(Diagnos, on_delete = models.CASCADE)
+#     conviction = models.IntegerField(default=0) 
+
+#     def __str__(self):
+#         return self.conviction
+
+
+# class PravilaRule(models.Model):
+#     question = models.ForeignKey(Question, on_delete = models.CASCADE)
+#     conviction = models.IntegerField(default=0) 
+#     rule = models.ForeignKey(Rule, on_delete = models.CASCADE)
+
+
+#     def __str__(self):
+#         return self.conviction
