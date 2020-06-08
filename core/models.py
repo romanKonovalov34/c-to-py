@@ -109,9 +109,9 @@ class Epicriz(models.Model):
         return self.lechenie
 
 
+####################################
 
-
-# Диагнозы
+# Диагнозы (это и есть diagnosRULE)
 class Diagnos(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     epicriz = models.ForeignKey(Epicriz, on_delete = models.CASCADE)
