@@ -39,6 +39,7 @@ from .forms import ProfileForm
 from .forms import DBEpicrizForm
 from .forms import DbDiagnosesForm
 from .forms import WorkWithRulesForm
+from .forms import DBSymptomsForm
 
 # Create your views here.
 
@@ -942,3 +943,63 @@ def work_with_rules(request, login):
         }
     template = "core/work_with_rules.html"
     return render(request, template, context)
+
+def db_symptoms(request, login):
+
+    global g_login
+    g_login = login
+    
+    db_symptoms_form = DBSymptomsForm()
+    
+
+    pravila = PravilaRule.objects.all()
+
+    context = {
+        'login': login,
+        'form': db_symptoms_form,
+        'pravila': pravila,
+    }
+    template = "core/db_symptoms.html"
+    return render(request, template, context)
+
+def job_with_db_symptoms(request):
+   
+    if request.method == "POST":
+
+        fields = {
+            'pravila_id': request.POST.get("pravila_id"),
+            'diagnos': request.POST.get("diagnos"),
+            'question': request.POST.get("question"),
+            'conviction': request.POST.get("conviction"),
+
+        }
+        
+        if '_add' in request.POST:
+
+            pravila = PravilaRule()
+            rule = Rule()
+
+            if fields['pravila_id'] !='':
+                question.id = fields['pravila_id']
+            pravila.question = fields['question']
+            rule.disease = fields['diagnos']
+            rule.conviction = fields['conviction']
+            pravila.rule = rule
+
+            pravila.save()
+
+
+        #pdb.set_trace()
+        if '_delete' in request.POST:
+            if PravilaRule.objects.all().filter(id=fields['pravila_id']):
+                PravilaRule.objects.all().filter(id=fields['pravila_id']).delete()
+        else:
+            return redirect('/doctor-' + g_login + '/db-symptoms/')
+
+         
+
+
+        #if '_change' in request.POST:
+
+
+        return redirect('/doctor-' + g_login + '/db-symptoms/')

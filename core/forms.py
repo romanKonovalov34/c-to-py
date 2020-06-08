@@ -161,3 +161,14 @@ class WorkWithRulesForm(forms.Form):
     conviction4.widget.attrs.update({'class': 'form-control'})
     diagnose_result.widget.attrs.update({'class': 'form-control'})   
     conviction_result.widget.attrs.update({'class': 'form-control'})
+
+class DBSymptomsForm(forms.Form):
+    pravila_id = forms.CharField(required='')
+    diagnos = forms.ModelChoiceField (queryset = Disease.objects.all(), to_field_name="name", label="Diagnos")
+    question = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    conviction = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+
+    pravila_id.widget.attrs.update({'class': 'form-control'})
+    diagnos.widget.attrs.update({'class': 'form-control'})
+    question.widget.attrs.update({'class': 'form-control'})
+    conviction.widget.attrs.update({'class': 'form-control'})
