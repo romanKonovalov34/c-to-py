@@ -139,14 +139,19 @@ class DbDiagnosesForm(forms.Form):
     epicriz.widget.attrs.update({'class': 'form-control'})
 
 class WorkWithRulesForm(forms.Form):
+    c =[("1", "small"), ("2", "big"), ("3", "larger")]
     symptom1 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
-    conviction1 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    # conviction1 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction1 = forms.ChoiceField(choices=c, label="Choices") 
     symptom2 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
-    conviction2 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    # conviction2 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction2 = forms.ChoiceField(choices=c, label="Choices") 
     symptom3 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
-    conviction3 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    # conviction3 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction3 = forms.ChoiceField(choices=c, label="Choices") 
     symptom4 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
-    conviction4 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    # conviction4 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction4 = forms.ChoiceField(choices=c, label="Choices") 
     diagnose_result = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
     conviction_result = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
 

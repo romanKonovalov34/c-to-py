@@ -1,6 +1,6 @@
 import pdb
 import datetime
-import cmath
+import math
 
 from django.shortcuts import render
 from django.views.generic import View
@@ -889,15 +889,22 @@ def work_with_rules(request, login):
 
     if request.method == "POST":
             if 'diagnose_this' in request.POST:
-                _r1 = request.POST.get("conviction1")
-                _r2 = request.POST.get("conviction2")
-                _r3 = request.POST.get("conviction3")
-                _r4 = request.POST.get("conviction4")
+                pdb.set_trace()
+                _r1 = ((int(request.POST.get("conviction1")))*10)*(25/10)
+                _r2 = ((int(request.POST.get("conviction2")))*10)*(25/10)
+                _r3 = ((int(request.POST.get("conviction3")))*10)*(25/10)
+                _r4 = ((int(request.POST.get("conviction4")))*10)*(25/10)
 
-                _v1 = request.POST.get("symptom1")
-                _v2 = request.POST.get("symptom2")
-                _v3 = request.POST.get("symptom3")
-                _v4 = request.POST.get("symptom4")
+                
+
+                someQuestion = request.POST.get("symptom1")
+                _v1 = Question.objects.get(question = someQuestion)
+                someQuestion = request.POST.get("symptom2")
+                _v2 = Question.objects.get(question = someQuestion)
+                someQuestion = request.POST.get("symptom3")
+                _v3 = Question.objects.get(question = someQuestion)
+                someQuestion = request.POST.get("symptom4")
+                _v4 = Question.objects.get(question = someQuestion)
 
                 mju = (_r1 + _r2 + _r3 + _r4) / 4
 
@@ -909,12 +916,13 @@ def work_with_rules(request, login):
                 ver = 0
 
                 try:
+                    # pdb.set_trace()
                     for pravila in command:
                         ### это я добавил свое (может я что то неправильно понял? Но должно работать)
                         id_q = pravila.question.id
                         if id_q == _v1.id or  id_q == _v2.id or  id_q == _v3.id or  id_q == _v4.id:  
                         ###
-                            uver = pravila.Rule.conviction
+                            uver = pravila.rule.conviction
                             rast = math.sqrt(uver * uver - mju * mju)
                             
                             if rast<min:
@@ -925,17 +933,18 @@ def work_with_rules(request, login):
                 except:
                     nothing = True
                 
-                work_with_rules_form.fields['diagnose_result'] = diagnos
-                work_with_rules_form.fields['conviction_result'] = ver
+                # pdb.set_trace()
+                work_with_rules_form.fields['diagnose_result'].initial = diagnos
+                work_with_rules_form.fields['conviction_result'].initial = ver
 
-                work_with_rules_form.fields['conviction1'] = _r1
-                work_with_rules_form.fields['conviction2'] = _r2
-                work_with_rules_form.fields['conviction3'] = _r3
-                work_with_rules_form.fields['conviction4'] = _r4
-                work_with_rules_form.fields['symptom1'] = _v1
-                work_with_rules_form.fields['symptom2'] = _v2
-                work_with_rules_form.fields['symptom3'] = _v3
-                work_with_rules_form.fields['symptom4'] = _v4
+                work_with_rules_form.fields['conviction1'].initial = _r1
+                work_with_rules_form.fields['conviction2'].initial = _r2
+                work_with_rules_form.fields['conviction3'].initial = _r3
+                work_with_rules_form.fields['conviction4'].initial = _r4
+                work_with_rules_form.fields['symptom1'].initial = _v1
+                work_with_rules_form.fields['symptom2'].initial = _v2
+                work_with_rules_form.fields['symptom3'].initial = _v3
+                work_with_rules_form.fields['symptom4'].initial = _v4
 
     context = {
         'login': login,
