@@ -967,6 +967,7 @@ def job_with_db_symptoms(request):
     if request.method == "POST":
 
         fields = {
+            'login': request.POST.get("login"),
             'pravila_id': request.POST.get("pravila_id"),
             'diagnos': request.POST.get("diagnos"),
             'question': request.POST.get("question"),
@@ -981,9 +982,12 @@ def job_with_db_symptoms(request):
 
             if fields['pravila_id'] !='':
                 question.id = fields['pravila_id']
-            pravila.question = fields['question']
-            rule.disease = fields['diagnos']
+            someQuestion = fields['question']
+            pravila.question = Question.objects.get(question = someQuestion)
+            someDisease = fields['diagnos']
+            rule.disease = Disease.objects.get(name = someDisease)
             rule.conviction = fields['conviction']
+            rule.save()
             pravila.rule = rule
 
             pravila.save()

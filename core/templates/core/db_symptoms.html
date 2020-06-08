@@ -67,13 +67,13 @@
         
                         <tbody>
         
-                            {% for pravila in pravilas %}
+                            {% for p in pravila %}
         
                             <tr>
-                                <td>{{ pravila.id }}</td>
-                                <td>{{ pravila.rule.disease.name }}</td>
-                                <td>{{ pravila.question.question }}</td>
-                                <td>{{ pravila.rule.conviction }}</td>
+                                <td>{{ p.id }}</td>
+                                <td>{{ p.rule.disease.name }}</td>
+                                <td>{{ p.question.question }}</td>
+                                <td>{{ p.rule.conviction }}</td>
                             </tr>
         
                             {% endfor %}
