@@ -111,7 +111,7 @@ class Epicriz(models.Model):
 
 ####################################
 
-# Диагнозы (это и есть diagnosRULE)
+# Диагнозы пациента
 class Diagnos(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     epicriz = models.ForeignKey(Epicriz, on_delete = models.CASCADE)
@@ -123,7 +123,8 @@ class Diagnos(models.Model):
 
 # правила
 class Rule(models.Model):
-    diagnos = models.ForeignKey(Diagnos, on_delete = models.CASCADE)
+    # diagnos = models.ForeignKey(Diagnos, on_delete = models.CASCADE)
+    disease = models.ForeignKey(Disease, on_delete = models.CASCADE)
     conviction = models.IntegerField(default=0) 
 
     def __str__(self):
@@ -132,9 +133,9 @@ class Rule(models.Model):
 
 class PravilaRule(models.Model):
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
-    conviction = models.IntegerField(default=0) 
+    # conviction = models.IntegerField(default=0) 
     rule = models.ForeignKey(Rule, on_delete = models.CASCADE)
 
 
     def __str__(self):
-        return self.conviction
+        return self.question

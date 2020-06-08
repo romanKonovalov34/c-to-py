@@ -11,6 +11,9 @@ from .models import Ancket
 from .models import Question
 from .models import Disease
 from .models import Epicriz
+from .models import Diagnos
+from .models import Rule
+from .models import PravilaRule
 
 class SigninForm(forms.Form):
     login = forms.CharField(max_length=50, label="login")
@@ -134,3 +137,27 @@ class DbDiagnosesForm(forms.Form):
     note.widget.attrs.update({'class': 'form-control'})
     disease.widget.attrs.update({'class': 'form-control'})
     epicriz.widget.attrs.update({'class': 'form-control'})
+
+class WorkWithRulesForm(forms.Form):
+    symptom1 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    conviction1 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    symptom2 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    conviction2 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    symptom3 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    conviction3 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    symptom4 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    conviction4 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    diagnose_result = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    conviction_result = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+
+
+    symptom1.widget.attrs.update({'class': 'form-control'})   
+    conviction1.widget.attrs.update({'class': 'form-control'})
+    symptom2.widget.attrs.update({'class': 'form-control'})   
+    conviction2.widget.attrs.update({'class': 'form-control'})
+    symptom3.widget.attrs.update({'class': 'form-control'})   
+    conviction3.widget.attrs.update({'class': 'form-control'})
+    symptom4.widget.attrs.update({'class': 'form-control'})   
+    conviction4.widget.attrs.update({'class': 'form-control'})
+    diagnose_result.widget.attrs.update({'class': 'form-control'})   
+    conviction_result.widget.attrs.update({'class': 'form-control'})

@@ -1,5 +1,6 @@
 import pdb
 import datetime
+import cmath
 
 from django.shortcuts import render
 from django.views.generic import View
@@ -22,6 +23,9 @@ from .models import Disease
 from .models import Answer
 from .models import Epicriz
 from .models import Diagnos
+from .models import Rule
+from .models import PravilaRule
+
 
 
 from .forms import SigninForm
@@ -34,6 +38,7 @@ from .forms import PostuplenieForm
 from .forms import ProfileForm
 from .forms import DBEpicrizForm
 from .forms import DbDiagnosesForm
+from .forms import WorkWithRulesForm
 
 # Create your views here.
 
@@ -862,4 +867,78 @@ def profile(request,login):
         'login': login,
         'form': profile_form,
         }
+    return render(request, template, context)
+
+def work_with_rules(request, login):
+    global g_login
+    g_login = login
+
+    work_with_rules_form = WorkWithRulesForm()
+
+    fields_save = {
+            'symptom1': "",
+            'symptom2': "",
+            'symptom3': "",
+            'symptom4': "",
+            'conviction1': "",
+            'conviction2': "",
+            'conviction3': "",
+            'conviction4': "",
+        }
+
+    if request.method == "POST":
+            if 'diagnose_this' in request.POST:
+                _r1 = request.POST.get("conviction1")
+                _r2 = request.POST.get("conviction2")
+                _r3 = request.POST.get("conviction3")
+                _r4 = request.POST.get("conviction4")
+
+                _v1 = request.POST.get("symptom1")
+                _v2 = request.POST.get("symptom2")
+                _v3 = request.POST.get("symptom3")
+                _v4 = request.POST.get("symptom4")
+
+                mju = (_r1 + _r2 + _r3 + _r4) / 4
+
+                command = PravilaRule.objects.select_related().all()
+
+                min = 100
+                _id = 0
+                diagnos = ""
+                ver = 0
+
+                try:
+                    for pravila in command:
+                        ### это я добавил свое (может я что то неправильно понял? Но должно работать)
+                        id_q = pravila.question.id
+                        if id_q == _v1.id or  id_q == _v2.id or  id_q == _v3.id or  id_q == _v4.id:  
+                        ###
+                            uver = pravila.Rule.conviction
+                            rast = math.sqrt(uver * uver - mju * mju)
+                            
+                            if rast<min:
+                                min = rast
+                                _id = pravila.id
+                                diagnos = pravila.rule.disease.name
+                                ver = uver
+                except:
+                    nothing = True
+                
+                work_with_rules_form.fields['diagnose_result'] = diagnos
+                work_with_rules_form.fields['conviction_result'] = ver
+
+                work_with_rules_form.fields['conviction1'] = _r1
+                work_with_rules_form.fields['conviction2'] = _r2
+                work_with_rules_form.fields['conviction3'] = _r3
+                work_with_rules_form.fields['conviction4'] = _r4
+                work_with_rules_form.fields['symptom1'] = _v1
+                work_with_rules_form.fields['symptom2'] = _v2
+                work_with_rules_form.fields['symptom3'] = _v3
+                work_with_rules_form.fields['symptom4'] = _v4
+
+    context = {
+        'login': login,
+        'form': work_with_rules_form,
+        }
+    template = "core/work_with_rules.html"
     return render(request, template, context)
