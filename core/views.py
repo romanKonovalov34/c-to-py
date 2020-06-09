@@ -1,5 +1,6 @@
 import pdb
 import datetime
+import math
 
 from django.shortcuts import render
 from django.views.generic import View
@@ -22,6 +23,9 @@ from .models import Disease
 from .models import Answer
 from .models import Epicriz
 from .models import Diagnos
+from .models import Rule
+from .models import PravilaRule
+
 
 
 from .forms import SigninForm
@@ -34,6 +38,8 @@ from .forms import PostuplenieForm
 from .forms import ProfileForm
 from .forms import DBEpicrizForm
 from .forms import DbDiagnosesForm
+from .forms import WorkWithRulesForm
+from .forms import DBSymptomsForm
 
 # Create your views here.
 
@@ -863,3 +869,150 @@ def profile(request,login):
         'form': profile_form,
         }
     return render(request, template, context)
+
+def work_with_rules(request, login):
+    global g_login
+    g_login = login
+
+    work_with_rules_form = WorkWithRulesForm()
+
+    fields_save = {
+            'symptom1': "",
+            'symptom2': "",
+            'symptom3': "",
+            'symptom4': "",
+            'conviction1': "",
+            'conviction2': "",
+            'conviction3': "",
+            'conviction4': "",
+        }
+
+    if request.method == "POST":
+            if 'diagnose_this' in request.POST:
+                pdb.set_trace()
+                _r1 = ((int(request.POST.get("conviction1")))*10)*(25/10)
+                _r2 = ((int(request.POST.get("conviction2")))*10)*(25/10)
+                _r3 = ((int(request.POST.get("conviction3")))*10)*(25/10)
+                _r4 = ((int(request.POST.get("conviction4")))*10)*(25/10)
+
+                
+
+                someQuestion = request.POST.get("symptom1")
+                _v1 = Question.objects.get(question = someQuestion)
+                someQuestion = request.POST.get("symptom2")
+                _v2 = Question.objects.get(question = someQuestion)
+                someQuestion = request.POST.get("symptom3")
+                _v3 = Question.objects.get(question = someQuestion)
+                someQuestion = request.POST.get("symptom4")
+                _v4 = Question.objects.get(question = someQuestion)
+
+                mju = (_r1 + _r2 + _r3 + _r4) / 4
+
+                command = PravilaRule.objects.select_related().all()
+
+                min = 100
+                _id = 0
+                diagnos = ""
+                ver = 0
+
+                try:
+                    # pdb.set_trace()
+                    for pravila in command:
+                        ### это я добавил свое (может я что то неправильно понял? Но должно работать)
+                        id_q = pravila.question.id
+                        if id_q == _v1.id or  id_q == _v2.id or  id_q == _v3.id or  id_q == _v4.id:  
+                        ###
+                            uver = pravila.rule.conviction
+                            rast = math.sqrt(uver * uver - mju * mju)
+                            
+                            if rast<min:
+                                min = rast
+                                _id = pravila.id
+                                diagnos = pravila.rule.disease.name
+                                ver = uver
+                except:
+                    nothing = True
+                
+                # pdb.set_trace()
+                work_with_rules_form.fields['diagnose_result'].initial = diagnos
+                work_with_rules_form.fields['conviction_result'].initial = ver
+
+                work_with_rules_form.fields['conviction1'].initial = _r1
+                work_with_rules_form.fields['conviction2'].initial = _r2
+                work_with_rules_form.fields['conviction3'].initial = _r3
+                work_with_rules_form.fields['conviction4'].initial = _r4
+                work_with_rules_form.fields['symptom1'].initial = _v1
+                work_with_rules_form.fields['symptom2'].initial = _v2
+                work_with_rules_form.fields['symptom3'].initial = _v3
+                work_with_rules_form.fields['symptom4'].initial = _v4
+
+    context = {
+        'login': login,
+        'form': work_with_rules_form,
+        }
+    template = "core/work_with_rules.html"
+    return render(request, template, context)
+
+def db_symptoms(request, login):
+
+    global g_login
+    g_login = login
+    
+    db_symptoms_form = DBSymptomsForm()
+    
+
+    pravila = PravilaRule.objects.all()
+
+    context = {
+        'login': login,
+        'form': db_symptoms_form,
+        'pravila': pravila,
+    }
+    template = "core/db_symptoms.html"
+    return render(request, template, context)
+
+def job_with_db_symptoms(request):
+   
+    if request.method == "POST":
+
+        fields = {
+            'login': request.POST.get("login"),
+            'pravila_id': request.POST.get("pravila_id"),
+            'diagnos': request.POST.get("diagnos"),
+            'question': request.POST.get("question"),
+            'conviction': request.POST.get("conviction"),
+
+        }
+        
+        if '_add' in request.POST:
+
+            pravila = PravilaRule()
+            rule = Rule()
+
+            if fields['pravila_id'] !='':
+                question.id = fields['pravila_id']
+            someQuestion = fields['question']
+            pravila.question = Question.objects.get(question = someQuestion)
+            someDisease = fields['diagnos']
+            rule.disease = Disease.objects.get(name = someDisease)
+            rule.conviction = fields['conviction']
+            rule.save()
+            pravila.rule = rule
+
+            pravila.save()
+
+
+        #pdb.set_trace()
+        if '_delete' in request.POST:
+            if PravilaRule.objects.all().filter(id=fields['pravila_id']):
+                PravilaRule.objects.all().filter(id=fields['pravila_id']).delete()
+        else:
+            return redirect('/doctor-' + g_login + '/db-symptoms/')
+
+         
+
+
+        #if '_change' in request.POST:
+
+
+        return redirect('/doctor-' + g_login + '/db-symptoms/')

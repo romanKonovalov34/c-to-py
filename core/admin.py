@@ -7,6 +7,8 @@ from .models import Question
 from .models import Ancket
 from .models import Patient
 from .models import User
+from .models import PravilaRule
+from .models import Rule
 
 
 # Register your models here.
@@ -17,3 +19,5 @@ admin.site.register(Answer)
 admin.site.register(Ancket)
 admin.site.register(Patient)
 admin.site.register(User)
+admin.site.register(PravilaRule)
+admin.site.register(Rule)

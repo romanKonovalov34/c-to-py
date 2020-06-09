@@ -11,6 +11,9 @@ from .models import Ancket
 from .models import Question
 from .models import Disease
 from .models import Epicriz
+from .models import Diagnos
+from .models import Rule
+from .models import PravilaRule
 
 class SigninForm(forms.Form):
     login = forms.CharField(max_length=50, label="login")
@@ -134,3 +137,43 @@ class DbDiagnosesForm(forms.Form):
     note.widget.attrs.update({'class': 'form-control'})
     disease.widget.attrs.update({'class': 'form-control'})
     epicriz.widget.attrs.update({'class': 'form-control'})
+
+class WorkWithRulesForm(forms.Form):
+    c =[("1", "small"), ("2", "big"), ("3", "larger")]
+    symptom1 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    # conviction1 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction1 = forms.ChoiceField(choices=c, label="Choices") 
+    symptom2 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    # conviction2 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction2 = forms.ChoiceField(choices=c, label="Choices") 
+    symptom3 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    # conviction3 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction3 = forms.ChoiceField(choices=c, label="Choices") 
+    symptom4 = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    # conviction4 = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+    conviction4 = forms.ChoiceField(choices=c, label="Choices") 
+    diagnose_result = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    conviction_result = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}))
+
+
+    symptom1.widget.attrs.update({'class': 'form-control'})   
+    conviction1.widget.attrs.update({'class': 'form-control'})
+    symptom2.widget.attrs.update({'class': 'form-control'})   
+    conviction2.widget.attrs.update({'class': 'form-control'})
+    symptom3.widget.attrs.update({'class': 'form-control'})   
+    conviction3.widget.attrs.update({'class': 'form-control'})
+    symptom4.widget.attrs.update({'class': 'form-control'})   
+    conviction4.widget.attrs.update({'class': 'form-control'})
+    diagnose_result.widget.attrs.update({'class': 'form-control'})   
+    conviction_result.widget.attrs.update({'class': 'form-control'})
+
+class DBSymptomsForm(forms.Form):
+    pravila_id = forms.CharField(required='')
+    diagnos = forms.ModelChoiceField (queryset = Disease.objects.all(), to_field_name="name", label="Diagnos")
+    question = forms.ModelChoiceField (queryset = Question.objects.all(), to_field_name="question", label="question")
+    conviction = forms.IntegerField(label="conviction",  max_value = 100, min_value = 0)
+
+    pravila_id.widget.attrs.update({'class': 'form-control'})
+    diagnos.widget.attrs.update({'class': 'form-control'})
+    question.widget.attrs.update({'class': 'form-control'})
+    conviction.widget.attrs.update({'class': 'form-control'})

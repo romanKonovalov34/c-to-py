@@ -21,6 +21,11 @@ urlpatterns = [
     path('doctor-<login>/chose-method-work-patient/', views.chose_method_work_patient, name="chose_method_work_patient"),
     path('doctor-<login>/job-with-db-epicriz/', views.job_with_db_epicriz, name="job_with_db_epicriz"),
     path('doctor-<login>/job-with-db-diagnozes/', views.job_with_db_diagnozes, name="job_with_db_diagnozes"),
+    path('doctor-<login>/work-with-rules/', views.work_with_rules, name="work_with_rules"),
+    path('doctor-<login>/db-symptoms/', views.db_symptoms, name="db_symptoms"),
+    path('job-with-db-symptoms/', views.job_with_db_symptoms, name="job_with_db_symptoms"),
+
+
 
 
 
